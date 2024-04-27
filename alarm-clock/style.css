@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+*, ::before, ::after{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #0e110e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: roboto;
+}
+.container{
+    width: 100%;
+    display: grid;
+}
+.container #currentTime{
+    text-align: center;
+    padding: 20px 0;
+    font-weight: 900;
+    font-size: 3rem;
+}
+.container .heading{
+    padding: 20px;text-align: center;
+}
+.container .heading h1{
+    font-size: 1.5rem;
+    white-space: nowrap;
+}
+.container .alarms-container{
+    display: grid;
+    gap: 10px;
+}
+.alarms-container .add-alarm{
+    padding: 20px;
+    color: white;
+    
+}
+.alarms-container .alarm{
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.alarm.active{
+    background-color: rgba(0, 0, 255, 0.1);
+}
+.alarm .alarm_Time{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.alarm #alarm_Time{
+    padding: 0 10px;
+}
+.alarm .delete_Btn{
+    background-color: red;
+    border-radius: 50%;
+    padding: 10px;
+}
+.alarm .alarm-info{
+    display: flex;
+    justify-content: space-between;
+    /* flex-basis: 60%; */
+}
+.alarm .alarm-info #alarm_date{
+    white-space: nowrap;
+    padding: 0 5px;
+}
+.alarm .alarm-button{
+    background-color: #eee;
+    height: 20px;
+    width: 50px;
+    border-radius: 10px;
+    position: relative;
+}
+.alarm-button .alarm-toggler{
+    height: 25px;
+    position: absolute;
+    background-color: #aaa;
+    width: 25px;
+    /* border: 1px solid #aaa; */
+    border-radius: 50%;
+    transition: left ease .4s;
+    left: 0;
+    transform: translateY(-10%);
+}
+.alarm-button .alarm-toggler.active{
+    left: 25px;
+    background-color: blue;
+}
