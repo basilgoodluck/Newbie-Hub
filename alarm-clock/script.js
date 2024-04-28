@@ -8,16 +8,10 @@ const alarm = document.querySelector('.alarms-container .alarm')
 const alarm_container = document.querySelector('.container .alarms-container')
 const alarm_parody = alarm.cloneNode(true)
 const nums = document.querySelector('.input-time')
+const timeHour = document.querySelector('.timeHour')
 const timeMin = document.querySelector('.timeMin')
 const timeSec = document.querySelector('.timeSec')
 
-// alarm_parody.id = "alarm_parody"
-
-
-alarm_Btn_Handler.addEventListener('click', ()=>{
-    alarm_Btn.classList.toggle('active')
-    alarm_Btn.parentNode.parentNode.parentNode.classList.toggle('active')
-})
 
 const clock = function () {
     const now = new Date()
@@ -29,6 +23,11 @@ const clock = function () {
     const time = `${hours}:${minutes}:${seconds}`
     current_Time.innerHTML = time
 }
+
+alarm_Btn_Handler.addEventListener('click', ()=>{
+    alarm_Btn.classList.toggle('active')
+    alarm_Btn.parentNode.parentNode.parentNode.classList.toggle('active')
+})
 
 setInterval(clock, 1000)
 
@@ -46,9 +45,53 @@ add_alarm_btn.addEventListener('click', ()=>{
 let num_array = []
 
 for (var i = 0; i <= 59; i++){
-    num_array.push(`<h4>${i.toString().padStart(2, 0)}</h4>`)
+    num_array.push(`<h4>${i.toString().padStart(2, 0)}</h4>`);
 }
 
-// nums.innerHTML = num_array.join()
+timeMin.innerHTML = num_array.join('');
+timeSec.innerHTML = num_array.join('');
 
-timeMin.innerHTML = num_array.join()
+let hour_array = [];
+for (var i = 0; i <= 11; i++) {
+    hour_array.push(`<h4>${i.toString().padStart(2, 0)}</h4>`);
+}
+
+timeHour.innerHTML = hour_array.join('');
+
+const h4Hour = timeHour.querySelector('h4').offsetHeight;
+
+timeHour.addEventListener('scroll', function () {
+    const scrollTop = timeHour.scrollTop;
+
+    const index = Math.floor(scrollTop / h4Hour);
+
+    const newScrollTop = index * h4Hour;
+
+    timeHour.scrollTop = newScrollTop
+})
+
+const h4Min = timeMin.querySelector('h4').offsetHeight;
+
+timeMin.addEventListener('scroll', function () {
+    const scrollTop = timeMin.scrollTop;
+
+    const index = Math.floor(scrollTop / h4Min)
+
+    const newScrollTop = index * h4Min
+
+    timeMin.scrollTop = newScrollTop
+})
+
+const h4Sec = timeMin.querySelector('h4').offsetHeight;
+
+timeSec.addEventListener('scroll', function () {
+    const scrollTop = timeSec.scrollTop;
+
+    const index = Math.floor(scrollTop / h4Sec)
+
+    const newScrollTop = index * h4Sec
+
+    timeSec.scrollTop = newScrollTop
+})
+
+

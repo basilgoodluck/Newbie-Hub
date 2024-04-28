@@ -30,9 +30,21 @@ body{
 .heading .input-time{
     font-size: 3rem;
     overflow-y: hidden;
-    height: 60px;
-    width: 200px;
+    display: flex;
+    justify-content: center;
     margin: 0 auto;
+    width: 100%;
+    height: 60px;
+}
+.input-time .timeHour, .input-time .timeMin, .input-time .timeSec {
+    overflow-y: scroll;
+}
+.input-time .timeHour::-webkit-scrollbar, .input-time .timeMin::-webkit-scrollbar, .input-time .timeSec::-webkit-scrollbar{
+    display: none;
+}
+.input-time .timeHour, .input-time .timeMin, .input-time .timeSec{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 .container .heading h1{
     font-size: 1.5rem;
