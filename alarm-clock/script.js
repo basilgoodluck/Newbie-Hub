@@ -1,97 +1,69 @@
-const alarm_Btn = document.querySelector('.alarm-button .alarm-toggler');
-const alarm_Btn_Handler = document.querySelector('.alarm .alarm-button');
-const current_Time = document.getElementById('currentTime');
-const delete_Btn = document.querySelectorAll('.alarm .delete_Btn')
-const alarm_Date = document.getElementById('alarm_date')
-const add_alarm_btn = document.querySelector('.add-alarm')
-const alarm = document.querySelector('.alarms-container .alarm')
-const alarm_container = document.querySelector('.container .alarms-container')
-const alarm_parody = alarm.cloneNode(true)
-const nums = document.querySelector('.input-time')
-const timeHour = document.querySelector('.timeHour')
-const timeMin = document.querySelector('.timeMin')
-const timeSec = document.querySelector('.timeSec')
+const Alarm = class {
+    constructor(clock, alarmList, hour, min, sec){
+        this.clock = clock;
+        this.alarmList = alarmList;
+        this.hour = hour;
+        this.min = min;
+        this.sec = sec;
+        this.generateClock();
+        this.alarmItem();
+    }
+    getCurrentTime () {
+        return new Date();
+    }
+    generateClock (){
+        return setInterval(() => {
+            this.clock.innerHTML = `${this.getCurrentTime().getHours().toString().padStart(2, 0)}:${this.getCurrentTime().getMinutes().toString().padStart(2, 0)}:${this.getCurrentTime().getSeconds().toString().padStart(2, 0)}`;
+        }, 1000);
+    }
+    alarmItem () {
+        const hou = this.hour;
+        const alarm = `<div class="alarm" id="alarm">
+            <div class="alarm_Time"><button class="delete_Btn"></button> <p id="alarm_time">${hou}</p></div>
+            <div class="alarm-info">
+                <p id="alarm_date">${this.getCurrentTime().toDateString()}</p>
+                <div class="alarm-button" id="alarm-button">
+                    <div class="alarm-toggler"></div>
+                </div>
+            </div>
+        </div>`;
 
+        // return this.alarmList.innerHTML = alarm
+        return this.appendAlarm(alarm);
+    }
 
-const clock = function () {
-    const now = new Date()
-    
-    const hours = now.getHours().toString().padStart(2, 0)
-    const minutes = now.getMinutes().toString().padStart(2, 0)
-    const seconds = now.getSeconds().toString().padStart(2, 0)
+    deleteAlarm () {
+        // Implementation for deleting an alarm
+    }
 
-    const time = `${hours}:${minutes}:${seconds}`
-    current_Time.innerHTML = time
+    switchAlarm () {
+        // Implementation for toggling an alarm
+    }
+
+    appendAlarm (alarm) {
+        this.alarmList.innerHTML += (alarm);
+    }
+
 }
 
-alarm_Btn_Handler.addEventListener('click', ()=>{
-    alarm_Btn.classList.toggle('active')
-    alarm_Btn.parentNode.parentNode.parentNode.classList.toggle('active')
-})
+const clockBlock = document.getElementById('currentTime');
+const alarmList = document.getElementById('alarms-container');
 
-setInterval(clock, 1000)
+let hour, min, sec; // Variables to store input values
 
-delete_Btn.forEach((btn)=>{
-    btn.addEventListener('click', ()=>{
-        btn.parentNode.parentNode.style.display = "none"
-    })
-})
+const alarmBtn = document.getElementById('alarm-button');
+const addAlarmBtn = document.getElementById('add-alarm');
 
-add_alarm_btn.addEventListener('click', ()=>{
-    const form = ``
-    return alarm_container.append(alarm_parody)
-})
+addAlarmBtn.addEventListener('click', () => {
+    // Update input values each time the button is clicked
+    hour = document.getElementById('timeHour').value;
+    min = document.getElementById('timeMin').value;
+    sec = document.getElementById('timeSec').value;
 
-let num_array = []
+    // Create a new alarm instance with updated input values
+    const alarm = new Alarm(clockBlock, alarmList, hour, min, sec);
+});
 
-for (var i = 0; i <= 59; i++){
-    num_array.push(`<h4>${i.toString().padStart(2, 0)}</h4>`);
-}
 
-timeMin.innerHTML = num_array.join('');
-timeSec.innerHTML = num_array.join('');
-
-let hour_array = [];
-for (var i = 0; i <= 11; i++) {
-    hour_array.push(`<h4>${i.toString().padStart(2, 0)}</h4>`);
-}
-
-timeHour.innerHTML = hour_array.join('');
-
-const h4Hour = timeHour.querySelector('h4').offsetHeight;
-
-timeHour.addEventListener('scroll', function () {
-    const scrollTop = timeHour.scrollTop;
-
-    const index = Math.floor(scrollTop / h4Hour);
-
-    const newScrollTop = index * h4Hour;
-
-    timeHour.scrollTop = newScrollTop
-})
-
-const h4Min = timeMin.querySelector('h4').offsetHeight;
-
-timeMin.addEventListener('scroll', function () {
-    const scrollTop = timeMin.scrollTop;
-
-    const index = Math.floor(scrollTop / h4Min)
-
-    const newScrollTop = index * h4Min
-
-    timeMin.scrollTop = newScrollTop
-})
-
-const h4Sec = timeMin.querySelector('h4').offsetHeight;
-
-timeSec.addEventListener('scroll', function () {
-    const scrollTop = timeSec.scrollTop;
-
-    const index = Math.floor(scrollTop / h4Sec)
-
-    const newScrollTop = index * h4Sec
-
-    timeSec.scrollTop = newScrollTop
-})
 
 
