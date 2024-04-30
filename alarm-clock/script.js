@@ -5,7 +5,7 @@ const Alarm = class {
         this.hour = hour;
         this.min = min;
         this.sec = sec;
-        this.active = true; // Set alarm to active by default
+        this.active = true; 
     }
 
     getCurrentTime () {
@@ -19,7 +19,6 @@ const Alarm = class {
             const currentMin = currentTime.getMinutes();
             const currentSec = currentTime.getSeconds();
 
-            // Check if alarm should ring
             if (this.active && this.hour === currentHour && this.min === currentMin && this.sec === currentSec) {
                 console.log('Ring the alarm!');
             }
@@ -62,7 +61,7 @@ const Alarm = class {
 
         const alarmToggler = document.createElement('div');
         alarmToggler.classList.add('alarm-toggler');
-        alarmToggler.classList.add(this.active ? 'active' : ''); // Add active class if alarm is active
+        alarmToggler.classList.add(this.active ? 'active' : '');
 
         alarmToggler.addEventListener('click', () => {
             this.switchAlarm();
@@ -84,7 +83,7 @@ const Alarm = class {
     }
 
     switchAlarm () {
-        this.active = !this.active; // Toggle alarm's active state
+        this.active = !this.active; 
     }
 
     appendAlarm (alarm) {
