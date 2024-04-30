@@ -5,65 +5,130 @@ const Alarm = class {
         this.hour = hour;
         this.min = min;
         this.sec = sec;
-        this.generateClock();
-        this.alarmItem();
+        this.active = true; // Set alarm to active by default
     }
+
     getCurrentTime () {
         return new Date();
     }
+
     generateClock (){
         return setInterval(() => {
-            this.clock.innerHTML = `${this.getCurrentTime().getHours().toString().padStart(2, 0)}:${this.getCurrentTime().getMinutes().toString().padStart(2, 0)}:${this.getCurrentTime().getSeconds().toString().padStart(2, 0)}`;
+            const currentTime = this.getCurrentTime();
+            const currentHour = currentTime.getHours();
+            const currentMin = currentTime.getMinutes();
+            const currentSec = currentTime.getSeconds();
+
+            // Check if alarm should ring
+            if (this.active && this.hour === currentHour && this.min === currentMin && this.sec === currentSec) {
+                console.log('Ring the alarm!');
+            }
+
+            this.clock.innerHTML = `${currentHour.toString().padStart(2, '0')}:${currentMin.toString().padStart(2, '0')}:${currentSec.toString().padStart(2, '0')}`;
         }, 1000);
     }
-    alarmItem () {
-        const hou = this.hour;
-        const alarm = `<div class="alarm" id="alarm">
-            <div class="alarm_Time"><button class="delete_Btn"></button> <p id="alarm_time">${hou}</p></div>
-            <div class="alarm-info">
-                <p id="alarm_date">${this.getCurrentTime().toDateString()}</p>
-                <div class="alarm-button" id="alarm-button">
-                    <div class="alarm-toggler"></div>
-                </div>
-            </div>
-        </div>`;
 
-        // return this.alarmList.innerHTML = alarm
-        return this.appendAlarm(alarm);
+    alarmItem () {
+        const alarm = document.createElement('div');
+        alarm.classList.add('alarm');
+
+        const alarmTime = document.createElement('div');
+        alarmTime.classList.add('alarm_Time');
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('delete_Btn');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => {
+            this.deleteAlarm(alarm);
+        });
+
+        const alarmTimeText = document.createElement('p');
+        alarmTimeText.id = 'alarm_time';
+        alarmTimeText.textContent = `${this.hour.toString().padStart(2, 0)}:${this.min.toString().padStart(2, 0)}:${this.sec.toString().padStart(2, 0)}`;
+
+        alarmTime.appendChild(deleteBtn);
+        alarmTime.appendChild(alarmTimeText);
+
+        const alarmInfo = document.createElement('div');
+        alarmInfo.classList.add('alarm-info');
+
+        const alarmDate = document.createElement('p');
+        alarmDate.id = 'alarm_date';
+        alarmDate.textContent = this.getCurrentTime().toDateString();
+
+        const alarmButton = document.createElement('div');
+        alarmButton.classList.add('alarm-button');
+        alarmButton.id = 'alarm-button';
+
+        const alarmToggler = document.createElement('div');
+        alarmToggler.classList.add('alarm-toggler');
+        alarmToggler.classList.add(this.active ? 'active' : ''); // Add active class if alarm is active
+
+        alarmToggler.addEventListener('click', () => {
+            this.switchAlarm();
+            alarmToggler.classList.toggle('active');
+        });
+
+        alarmButton.appendChild(alarmToggler);
+        alarmInfo.appendChild(alarmDate);
+        alarmInfo.appendChild(alarmButton);
+
+        alarm.appendChild(alarmTime);
+        alarm.appendChild(alarmInfo);
+
+        this.alarmList.appendChild(alarm);
     }
 
-    deleteAlarm () {
-        // Implementation for deleting an alarm
+    deleteAlarm (alarm) {
+        alarm.remove();
     }
 
     switchAlarm () {
-        // Implementation for toggling an alarm
+        this.active = !this.active; // Toggle alarm's active state
     }
 
     appendAlarm (alarm) {
-        this.alarmList.innerHTML += (alarm);
+        this.alarmList.appendChild(alarm);
     }
-
 }
 
 const clockBlock = document.getElementById('currentTime');
 const alarmList = document.getElementById('alarms-container');
 
-let hour, min, sec; // Variables to store input values
+// Start the clock immediately
+const alarmClock = new Alarm(clockBlock, alarmList, 0, 0, 0);
+alarmClock.generateClock();
 
-const alarmBtn = document.getElementById('alarm-button');
 const addAlarmBtn = document.getElementById('add-alarm');
 
-addAlarmBtn.addEventListener('click', () => {
-    // Update input values each time the button is clicked
-    hour = document.getElementById('timeHour').value;
-    min = document.getElementById('timeMin').value;
-    sec = document.getElementById('timeSec').value;
-
-    // Create a new alarm instance with updated input values
-    const alarm = new Alarm(clockBlock, alarmList, hour, min, sec);
+const inputBoxes = document.querySelectorAll('.input-time .input');
+inputBoxes.forEach(box => {
+    box.addEventListener('input', (event) =>{
+        event.target.value = event.target.value.replace(/\D/g, '');
+    });
 });
 
+addAlarmBtn.addEventListener('click', () => {
+    const hourInput = document.getElementById('timeHour').value.trim();
+    const minInput = document.getElementById('timeMin').value.trim();
+    const secInput = document.getElementById('timeSec').value.trim();
 
+    const digitRegex = /^\d+$/;
 
+    if (!hourInput.match(digitRegex) || !minInput.match(digitRegex) || !secInput.match(digitRegex)) {
+        alert('Please enter numeric values for hour, minute, and second.');
+        return;
+    }
 
+    const hour = parseInt(hourInput, 10);
+    const min = parseInt(minInput, 10);
+    const sec = parseInt(secInput, 10);
+
+    if (hour < 0 || hour > 23 || min < 0 || min > 59 || sec < 0 || sec > 59) {
+        alert('Please enter valid time values (24-hour format).');
+        return; 
+    }
+
+    const alarm = new Alarm(clockBlock, alarmList, hour, min, sec);
+    alarm.alarmItem();
+});
